@@ -8,7 +8,7 @@ budget_csv = os.path.join("Resources", "budget_data.csv")
 
 #Variables
 totalMonths = 0
-netAmount = 0
+netTotal = 0
 monthlyChange = []
 monthlyCount = []
 greatestIncrease = 0
@@ -20,67 +20,69 @@ greatestMonthlyDecrease = 0
 with open(budget_csv) as csvfile:
 
     #CSV specifies delimiter
-    csvreader = csv.reader(csvfile, delimiter = ',')
+    csvReader = csv.reader(csvfile, delimiter = ',')
 
-    #Remove header
-    csv_header = next(csvreader)
-    row = next(csvreader)
+    #Read header & row
+    csvHeader = next(csvReader)
+    row = next(csvReader)
 
-    #Calculate total months, net amount of profits/losses & set variables
-    previousRow = int(row[1])
+    #Calculate total months, net total amount of profits/losses & set variables
+    #have to initialize outside of for loop
+    lastRow = int(row[1]) #using brackets for list
     totalMonths += 1
-    netAmount += int(row[1])
+    netTotal += int(row[1])
     greatestIncrease = int(row[1])
     greatestMonthlyIncrease = row[0]
 
     #Read each row of data
-    for row in csvreader:
+    for row in csvReader:
 
-        #Calculate total number of months
+        #The total number of months included in the dataset
         totalMonths += 1
 
-        #Calculate net amount of profits/losses over range
-        netAmount += int(row[1])
+        #The net total amount of "Profit/Losses" over the entire period
+        netTotal += int(row[1])
 
-        #Calculate change from current month to previous
-        revenueChange = int(row[1]) - previousRow
+        #Calculate the changes in "Profit/Losses" over the entire period
+        revenueChange = int(row[1]) - lastRow
         monthlyChange.append(revenueChange)
-        previousRow = int(row[1])
+        lastRow = int(row[1])
         monthlyCount.append(row[0])
 
-        #Calculate the greatest increase
+        #Average of those changes, date
+        averageChange = sum(monthlyChange)/ len(monthlyChange)
+
+        #The greatest increase in profits over the entire period
         if int(row[1]) > greatestIncrease:
             greatestIncrease = int(row[1])
             greatestMonthlyIncrease = row[0]
+
+        highestChange = max(monthlyChange)
         
-        #Calculate the greatest decrease
+        #The greatest decrease in losses over the entire period
         if int(row[1]) < greatestDecrease:
             greatestDecrease = int(row[1])
             greatestMonthlyDecrease = row[0]
-
-    #Calculate the average and date
-    averageChange = sum(monthlyChange)/ len(monthlyChange)
-
-    highestChange = max(monthlyChange)
-    lowestChange = min(monthlyChange)
+        
+        lowestChange = min(monthlyChange)
 
 #Final analysis
 print(f"Financial Analysis")
 print(f"--------------------")
 print(f"Total months: {totalMonths}")
-print(f"Total: ${netAmount}")
+print(f"Total: ${netTotal}")
 print(f"Average change: ${averageChange:.2f}")
 print(f"Greatest increase in profits: {greatestMonthlyIncrease}: (${highestChange})")
 print(f"Greatest decrease in profits: {greatestMonthlyDecrease}: (${lowestChange})")
 
 #Text output
-output_path = "Financial Analysis.txt"
+output_path = "Financial_Analysis.txt"
 with open(output_path, 'w', newline = '') as csvfile:
     csvwriter = csv.writer(csvfile, delimiter = ',')
     csvwriter.writerow([f"Financial Analysis"])
     csvwriter.writerow([f"--------------------"])
     csvwriter.writerow([f'Total months: {totalMonths}'])
-    csvwriter.writerow([f'Total: ${netAmount}'])
+    csvwriter.writerow([f'Total: ${netTotal}'])
     csvwriter.writerow([f'Average change: ${averageChange:.2f}'])
     csvwriter.writerow([f'Greatest increase in profits: {greatestMonthlyIncrease}: (${highestChange})'])
     csvwriter.writerow([f'Greatest decrease in profits: {greatestMonthlyDecrease}: (${lowestChange})'])
