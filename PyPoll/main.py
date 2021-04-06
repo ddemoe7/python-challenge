@@ -3,6 +3,7 @@ import os
 import csv
 
 #Path to csv
+#In the resources folder - renamed file
 poll_csv = os.path.join("Resources", "election_data.csv")
 
 #Variables
@@ -16,34 +17,27 @@ otooleyVotes = 0
 with open(poll_csv) as csvfile:
 
     #CSV specifies delimiter
-    csvreader = csv.reader(csvfile, delimiter = ',')
+    csvReader = csv.reader(csvfile, delimiter = ',')
 
-    #Remove header
-    csv_header = next(csvfile)
+    #Read header
+    csvHeader = next(csvReader)
 
     #Read each row of data
-    for row in csvreader:
+    for row in csvReader:
         
-        #Calculate total number of votes cast
+        #The total number of votes cast
         totalVotes += 1
 
-        #Calcluate total number of votes each candidate won
+        #The total number of votes each candidate won
         if (row[2] == "Khan"):
             khanVotes += 1
         elif (row[2] == "Correy"):
             correyVotes += 1
         elif (row[2] == "Li"):
             liVotes += 1
-        else:
-            otooleyVotes += 1
+        else: otooleyVotes += 1
 
-#Calculate percentage each candidate won
-khanPercent = khanVotes / totalVotes
-correyPercent = correyVotes / totalVotes
-liPercent = liVotes / totalVotes
-otooleyPercent = otooleyVotes / totalVotes
-
-#Calculate winner
+#The winner of the election based on popular vote
 #max function returns highest value
 winner = max(khanVotes, correyVotes, liVotes, otooleyVotes)
 
@@ -53,10 +47,16 @@ elif winner == correyVotes:
     winnerName = "Correy"
 elif winner == liVotes:
     winnerName = "Li"
-else:
-    winnerName = "O'Tooley" #if no one else then otooley
+else: winnerName = "O'Tooley" #if no one else then otooley
 
-#Final analysis
+#The percentage of votes each candidate won
+khanPercent = khanVotes / totalVotes
+correyPercent = correyVotes / totalVotes
+liPercent = liVotes / totalVotes
+otooleyPercent = otooleyVotes / totalVotes
+
+#Final analysis (A complete list of candidates who received votes)
+#.3% gives three decimal points
 print(f"Election Results")
 print(f"------------------")
 print(f"Total votes: {totalVotes}")
@@ -70,7 +70,7 @@ print(f"Winner: {winnerName}")
 print(f"------------------")
 
 #Text output
-output_path = 'Election Results.txt'
+output_path = 'Election_Results.txt'
 with open(output_path, 'w', newline = '') as csvfile:
     csvwriter = csv.writer(csvfile, delimiter = ',')
     csvwriter.writerow([f"Election Results"])
