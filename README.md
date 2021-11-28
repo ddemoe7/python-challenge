@@ -1,7 +1,7 @@
-# Python-challenge
+# Financial Records
 Python Exercise - Py Me Up, Charlie
 <br>
-<i>A two part assignment.</i>
+<i>A two part assignment. (Python-challenge)</i>
 
 ## PyBank
 The goal of this assignment is to create a Python script for analyzing the financial records of a company using a provided data set. The financial data set is composed of two columns: Date and Profit/Losses.
